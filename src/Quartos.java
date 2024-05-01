@@ -42,4 +42,28 @@ public class Quartos {
         }
     }
 
+    public void limpar() throws InterruptedException {
+        lock.lock();
+        try {
+            while (ocupado || emLimpeza) {
+                disponivelParaLimpeza.await();
+            }
+            emLimpeza = true;
+            System.out.println("Limpeza iniciada no quarto " + numero);
+            
+            Thread.sleep(1000);
+            
+            emLimpeza = false;
+            System.out.println("Limpeza concluída no quarto " + numero);
+            
+            disponivelParaHospede.signal();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean isDisponivel() {
+        return !ocupado && !emLimpeza;
+    }
+
 }
