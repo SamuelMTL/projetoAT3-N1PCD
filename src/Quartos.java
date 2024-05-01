@@ -6,6 +6,7 @@ public class Quartos {
     private final int numero;
     private boolean ocupado;
     private boolean emLimpeza;
+    private boolean chaveNaRecepcao;
     private final Lock lock = new ReentrantLock();
     private final Condition disponivelParaLimpeza = lock.newCondition();
     private final Condition disponivelParaHospede = lock.newCondition();
@@ -14,6 +15,7 @@ public class Quartos {
         this.numero = numero;
         this.ocupado = false;
         this.emLimpeza = false;
+        this.chaveNaRecepcao = true;
     }
 
     public void checkIn(int numeroDeHospedes) throws InterruptedException {
@@ -24,6 +26,7 @@ public class Quartos {
                 disponivelParaHospede.await();
             }
             ocupado = true;
+            chaveNaRecepcao = false; 
             System.out.println("Quarto " + numero + " ocupado por " + numeroDeHospedes + " hóspedes.");
         } finally {
             lock.unlock();
@@ -34,6 +37,7 @@ public class Quartos {
         lock.lock();
         try {
             ocupado = false;
+            chaveNaRecepcao = true;
             
             disponivelParaLimpeza.signal();
             System.out.println("Quarto " + numero + " desocupado e esperando limpeza.");
@@ -63,7 +67,7 @@ public class Quartos {
     }
 
     public boolean isDisponivel() {
-        return !ocupado && !emLimpeza;
+        return !ocupado && !emLimpeza && chaveNaRecepcao;
     }
 
 }
