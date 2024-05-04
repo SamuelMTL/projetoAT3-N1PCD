@@ -13,12 +13,17 @@ public class Guest extends Thread {
 
     @Override
     public void run() {
+        // Enquanto a thread não for interrompida
         while (!Thread.interrupted()) {
+            // Tenta dar um passeio.
             try {
                 takeAWalk();
+                // Enquanto o quarto estiver sendo limpo a thread dorme por 1 segundo
+                // pois os guests não podem entrar no quarto.
                 while (room.isBeingCleaned()) {
                     Thread.sleep(cleaningWaitTime);
                 }
+                // Se eles não estiverem mais fora o número de caminhadas é incrementado.
                 if (!isOutside) {
                     numberOfWalksTaken++;
                 }
@@ -29,6 +34,7 @@ public class Guest extends Thread {
         }
     }
 
+    // Método responsável pelo guest dar um passeio
     public void takeAWalk() {
         try {
             isOutside = true;
@@ -37,5 +43,13 @@ public class Guest extends Thread {
         } catch (InterruptedException e) {
             System.out.println("Failed to execute Guest thread action " + e.getMessage());
         }
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }
