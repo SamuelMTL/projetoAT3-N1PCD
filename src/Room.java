@@ -15,11 +15,15 @@ public class Room {
     }
 
     public synchronized void setStatus(RoomStatus status) {
+        // Estado velho
         boolean isRoomCurrentlyInUse = this.status == RoomStatus.IN_USE;
+        // Estado novo que eu quero atualizar
         boolean willGuestsLeaveTheRoom = status == RoomStatus.NOT_IN_USE || status == RoomStatus.VACANT;
+        // Verifica se o quarto está atualmente em uso e vai para o estado em que os hóspedes saem
         if (isRoomCurrentlyInUse && willGuestsLeaveTheRoom) {
-            // Notify clean keeper to start cleaning the room
+            Hotel.sharedHotel.assignCleanKeeperToCleanRoom(this);
         }
+        // Atualiza o valor
         this.status = status;
     }
 

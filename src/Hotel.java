@@ -17,4 +17,6 @@ public class Hotel {
                 .filter(guest -> guest.getRoom() == room)
                 .forEach(guest -> receptionists[0].checkGuestOut(guest));
     }
+
+    public void assignCleanKeeperToCleanRoom(Room room) {}
 }
