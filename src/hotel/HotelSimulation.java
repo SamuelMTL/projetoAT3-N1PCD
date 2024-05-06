@@ -9,6 +9,12 @@ import java.util.List;
 
 class HotelSimulation {
     public static void main(String[] args) {
+
+        final int numRooms = 10;
+        final int numGuests = 50;
+        final int numMaids = 10;
+        final int numReceptionists = 5;
+
         List<Room> rooms = new ArrayList<>();
         List<Thread> guests = new ArrayList<>();
         List<Thread> maids = new ArrayList<>();
