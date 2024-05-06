@@ -43,14 +43,14 @@ public class Guest implements Runnable {
                         if (random.nextBoolean()) {
                         sairParaPassear(availableRoom); // Chamada do método para simular o passeio
                         } else {
-                            System.out.println(name + " decidiu não sair para passear.");
+                            System.out.println(name + " has decide to don't go for a walk..");
                             availableRoom.checkOut();
                         }
 
                         return; // Se conseguiu alugar um quarto, retorna
                     //}
                 } else {
-                    System.out.println(name + " is waiting for a room.");
+                    System.out.println(name + " is waiting for a room in the hotel waiting line.");
                     Thread.sleep(random.nextInt(10000)); // Simulate waiting time
                     attempts++; // Incrementa o contador de tentativas
                     if (attempts == 2) {
