@@ -24,7 +24,7 @@ public class Guest implements Runnable {
             while (attempts < 2) { // Limite de 2 tentativas
                 Room availableRoom = findAvailableRoom();
                 if (availableRoom != null) {
-                    synchronized (availableRoom) {
+                    //synchronized (availableRoom) {
                         int remainingCapacity = availableRoom.getCapacity();
                         while (remainingCapacity > 0) {
                             int guestsToCheckIn = Math.min(remainingCapacity, 4); // Check in up to 4 guests or remaining capacity
@@ -33,8 +33,22 @@ public class Guest implements Runnable {
                             remainingCapacity -= guestsToCheckIn;
                             if (remainingCapacity == 0) break; // If room is fully occupied, break
                         }
+
+                        // Aqui vai ser a lógica de estadia.
+                        // Decidir aleatoriamente se o hóspede sairá para passear ou não
+
+                        Thread.sleep(random.nextInt(10000)); // Simula um tempo de espera para sair para passear
+
+                        // Decide se ele vai passear, ou apenas fazer check-out
+                        if (random.nextBoolean()) {
+                        sairParaPassear(availableRoom); // Chamada do método para simular o passeio
+                        } else {
+                            System.out.println(name + " decidiu não sair para passear.");
+                            availableRoom.checkOut();
+                        }
+
                         return; // Se conseguiu alugar um quarto, retorna
-                    }
+                    //}
                 } else {
                     System.out.println(name + " is waiting for a room.");
                     Thread.sleep(random.nextInt(10000)); // Simulate waiting time
@@ -62,4 +76,30 @@ public class Guest implements Runnable {
             return null;
         }
     }
+
+    // Método para simular o hóspede saindo para passear
+    private void sairParaPassear(Room room) throws InterruptedException {
+        System.out.println(name + " has going to a walk.");
+
+        room.leaveKeyAtReception(); // Deixa a chave na recepção
+        room.cleanRoom();
+
+        Thread.sleep(random.nextInt(10000)); // Simula um tempo de espera para passeio
+        // Espera até a camareira notificar que pode voltar ao quarto
+        synchronized (room) {
+            while (room.isCleaningInProgress()) {
+                room.wait();
+            }
+
+            synchronized (room) {
+                room.takeKeyFromReception(); // Pega a chave de volta
+                System.out.println(name + " came back to the room.");
+            }
+        }
+        Thread.sleep(random.nextInt(10000)); // Simula um tempo de estadia para check-out
+        room.checkOut(); // Hóspede faz checkout
+
+        //}
+    }
 }
+

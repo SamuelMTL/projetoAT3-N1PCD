@@ -23,9 +23,8 @@ public class Maid implements Runnable {
                 synchronized (rooms) {
                     for (Room room : rooms) {
                         synchronized (room) {
-                            if (!room.isOccupied()) {
+                            if (room.isCleaningInProgress() && (!room.isOccupied() || (room.isOccupied() && room.isKeyAvailable()))) {
                                 room.cleanRoom(); // Clean the room
-                                break;
                             }
                         }
                     }
@@ -34,5 +33,9 @@ public class Maid implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getName() {
+        return name;
     }
 }

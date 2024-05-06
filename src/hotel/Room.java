@@ -1,6 +1,7 @@
 package hotel;
 
 import java.util.Random;
+import maid.Maid;
 
 public class Room {
     private final int number;
@@ -28,10 +29,11 @@ public class Room {
         keyAvailable = false; // A chave é retirada quando o quarto é ocupado
     }
 
-    public synchronized void checkOut(int numOfGuests) {
+    public synchronized void checkOut() {
         occupied = false;
-        guestsCount -= numOfGuests;
+        guestsCount = 0;
         keyAvailable = true; // A chave é devolvida quando o quarto é desocupado
+        System.out.println("Room " + number + " has checked-out and left the hotel");
         cleaningInProgress = true; // Indica que a limpeza está em andamento
         notifyAll(); // Notifica camareiras que a limpeza pode começar
     }
@@ -40,6 +42,12 @@ public class Room {
         keyAvailable = true; // Deixa a chave na recepção
         System.out.println("Room " + number + " key left at the reception.");
         notifyAll(); // Notifica threads que estão esperando por essa chave
+    }
+
+    // Método para pegar a chave de volta da recepção
+    public synchronized void takeKeyFromReception() {
+        keyAvailable = false; // Marca a chave como indisponível
+        System.out.println("Room " + number + " retrieved from reception.");
     }
 
     public synchronized void cleanRoom() throws InterruptedException {
