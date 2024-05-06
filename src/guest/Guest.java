@@ -91,10 +91,9 @@ public class Guest implements Runnable {
                 room.wait();
             }
 
-            synchronized (room) {
                 room.takeKeyFromReception(); // Pega a chave de volta
                 System.out.println(name + " came back to the room.");
-            }
+
         }
         Thread.sleep(random.nextInt(10000)); // Simula um tempo de estadia para check-out
         room.checkOut(); // Hóspede faz checkout

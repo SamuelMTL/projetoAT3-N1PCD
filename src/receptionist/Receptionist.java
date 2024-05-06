@@ -23,7 +23,7 @@ public class Receptionist implements Runnable {
                 synchronized (rooms) {
                     for (Room room : rooms) {
                         synchronized (room) {
-                            if (room.isOccupied() && !room.isCleaningInProgress()) {
+                            if (!room.isOccupied() && !room.isCleaningInProgress()) {
                                 room.leaveKeyAtReception(); // Leave the key at the reception
                                 break;
                             }
